@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include "lab3.hpp"
 //#include <map>
 //using namespace std;
 
@@ -208,7 +209,7 @@ std::vector<Lexeme> ToPostfix(std::vector<Lexeme> input) {
 	return res;
 }
 
-double Calculate(std::vector<Lexeme> postfix) {}
+double Calculate(std::vector<Lexeme> postfix) { return 0.; }
 
 int main()
 {
