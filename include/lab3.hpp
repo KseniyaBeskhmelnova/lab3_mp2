@@ -36,7 +36,7 @@ class Lexeme {
 public:
 	std::string name;        // название лексемы
 	TypeLexeme type;         // тип
-	double value;            // значение (в случае числа)
+	double value = 0.;            // значение (в случае числа)
 	Priority priority;       // приоритет
 public:
 	Lexeme() :type(TypeLexeme::no_type), name(), priority(Priority::no_priority) {}

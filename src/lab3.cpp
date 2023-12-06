@@ -32,7 +32,7 @@ Lexeme GetNextLexeme(std::string input, int &index, StatusLexeme status) {
 	if (symbol >= '0' && symbol <= '9') {
 		char* ptrEnd;
 		double value = strtod(&input[index], &ptrEnd);
-		int dif = (static_cast<const char*>(ptrEnd) - &input[index]);
+		int dif = (ptrEnd - &input[index]);
 		std::string name = input.substr(index, dif);
 		index += dif - 1;
 		return Lexeme(name, TypeLexeme::number, value, Priority::no_priority);
@@ -120,6 +120,8 @@ std::vector<Lexeme> Parse(std::string input) {
 	}
 	if (leftBracketCounter!=rightBracketCounter)
 		throw "Incorrect input! Check brackets!";
+	if (status != StatusLexeme::number && status != StatusLexeme::right_bracket && status != StatusLexeme::end)
+		throw "Incorrect input! Incorrect end!";
 	return res;
 }
 
@@ -171,7 +173,7 @@ double Calculate(std::vector<Lexeme> postfix) {
 			stack.pop();
 			double b = stack.top().value;
 			stack.pop();
-			double res;
+			double res = 0.;
 			if (item.name == "+")
 				res = a + b;
 			else if (item.name == "-")
@@ -196,7 +198,7 @@ double Calculate(std::vector<Lexeme> postfix) {
 		}
 		else if (item.type == TypeLexeme::function) {
 			double a = stack.top().value;
-			double res;
+			double res = 0.;
 			stack.pop();
 			if (item.name == "abs")
 				res = abs(a);
@@ -226,8 +228,13 @@ int main()
 	std::cout << "Enter arinhmetic expression: ";
 	std::string input;
 	std::cin >> input;
-	std::vector<Lexeme> parsed = Parse(input);
-	std::vector<Lexeme> postfix = ToPostfix(parsed);
-	double res = Calculate(postfix);
-	std::cout << "Result: " << res;
+	try {
+		std::vector<Lexeme> parsed = Parse(input);
+		std::vector<Lexeme> postfix = ToPostfix(parsed);
+		double res = Calculate(postfix);
+		std::cout << "Result: " << res;
+	}
+	catch (const char* s) {
+		std::cout << "incorrect input"  << s << "\n";
+	}
 }
